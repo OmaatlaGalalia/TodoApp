@@ -1,0 +1,52 @@
+﻿@page "/"
+@using TodoApp.Models
+<PageTitle>Home</PageTitle>
+
+<div class="todo-container">
+
+    <h1>TO-DO LIST</h1>
+    <div class="todo-input">
+        <input type="text" @bind ="todoInput"/>
+            <button @onclick="addTodo">ADD</button>
+    </div>
+</div>
+
+@for(int i=0; i < todos.Count; i++)
+{
+    var index = i;
+    var todo = todos[i];
+
+    <div class="todo-item">
+        <div
+            class=" @(todo.IsComplete ? "todo-item_text complete": "todo-item_text")"
+        @onclick="@(()=> MarkAsComplete(todo))">
+        @todo.Title
+        </div>
+
+        <div class="todo-item_close" @onclick="@(()=>RemoveTodo(index))">
+            &times;
+        </div>
+    </div>
+}
+@code 
+{
+    public string todoInput{ get; set; }
+    public List<Todo> todos = new List<Todo>();
+
+    public void addTodo()
+    {   
+        var todo = new Todo();
+        todo.Title = todoInput;
+        todos.Add(todo);
+        todoInput = "";
+    }
+
+    public void RemoveTodo (int index)
+    {
+        todos.RemoveAt(index);
+    }
+    public void MarkAsComplete(Todo todo)
+    {
+        todo.IsComplete = !todo.IsComplete;
+    }
+}
